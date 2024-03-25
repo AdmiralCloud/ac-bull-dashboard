@@ -10,6 +10,8 @@ export interface Props {
     className?: string;
 }
 
+let requestJobsTimeout;
+
 const JobListRequester: React.FC<Props> = ( { className } ) => {
     const { env, refreshInterval } = useContext( OptionsContext )
     const { setData } = useContext( DataContext )
@@ -22,19 +24,27 @@ const JobListRequester: React.FC<Props> = ( { className } ) => {
                 } )
 
                 setData( sortedData )
+
+                requestJobsTimeout = setTimeout(() => requestJobs(), refreshInterval)
             } )
             .catch( ( err ) => {
                 console.error( err )
+                requestJobsTimeout = setTimeout(() => requestJobs(), refreshInterval)
             } )
     }, [ env, setData ] )
 
     useEffect( () => {
-        requestJobs()
-        const interval = setInterval( () => {
-            requestJobs()
-        }, refreshInterval )
-        return () => clearInterval( interval )
-    }, [ refreshInterval, requestJobs, setData ] )
+        requestJobs();
+        return () => requestJobsTimeout && clearTimeout(requestJobsTimeout)
+    }, [])
+
+    // useEffect( () => {
+    //     requestJobs()
+    //     const interval = setInterval( () => {
+    //         requestJobs()
+    //     }, refreshInterval )
+    //     return () => clearInterval( interval )
+    // }, [ refreshInterval, requestJobs, setData ] )
 
     const stylez = css``
 
