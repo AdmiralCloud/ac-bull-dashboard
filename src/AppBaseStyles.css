@@ -20,7 +20,3 @@ html, body, #root {
 .w50pc {
     width: 50%;
 }
-
-.MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover {
-    background-color: rgba( 0, 0, 0, 0.2 ) !important;
-}

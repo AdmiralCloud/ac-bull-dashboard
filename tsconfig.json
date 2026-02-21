@@ -4,8 +4,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "target": "es5",
-    "jsx": "react",
+    "target": "ESNext",
+    "jsx": "react-jsx",
     "module": "esNext",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -16,29 +16,24 @@
     "noImplicitReturns": false,
     "removeComments": true,
     "strictNullChecks": false,
-    "outDir": "dist",
     "lib": [
-      "es6",
-      "es7",
+      "ESNext",
       "dom"
     ],
     "baseUrl": ".",
+    "noEmit": true,
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
     "paths": {
       "@helper/*": [ "src/helper/*" ],
       "@components/*": [ "src/components/*" ],
       "@root/*": [ "src/*" ],
-    },
-    "plugins": [
-      {
-        "name": "typescript-styled-plugin",
-        "lint": {
-          "validProperties": [ "label" ]
-        }
-      }
-    ]
+    }
   },
   "exclude": [
     "dist",
+    "dist-dev",
     "node_modules",
   ]
 }
