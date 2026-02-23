@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { css, cx } from 'emotion'
+import { css, cx } from '@emotion/css'
 import IndicatorCircle from '@components/IndicatorCircle/IndicatorCircle'
 
 import { colors } from '../../../../config/colors'

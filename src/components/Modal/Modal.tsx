@@ -1,26 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import { css, cx } from 'emotion'
-import { Transition } from 'react-spring/renderprops'
-
-import useHotkeyChain from '../../customHooks/useHotkeyChain'
+import { css, cx } from '@emotion/css'
 
 export interface Props {
     className?: string;
-    escapeable?: boolean
+    escapeable?: boolean;
+    children?: React.ReactNode;
 }
 
-const Modal: React.FC<Props> = ( { className, escapeable, children } ) => {
-    const [ show, setShow ] = useState( false )
-    useHotkeyChain( [ 'Escape' ], () => escapeable && setShow( false ) )
+const Modal: React.FC<Props> = ( { className, children } ) => {
+    const [ isVisible, setIsVisible ] = useState( false )
 
     useEffect( () => {
-        setShow( true )
-        return () => setShow( false )
+        setIsVisible( true )
+        return () => setIsVisible( false )
     }, [] )
 
     const stylez = css`
-
         top: 0;
         left: 0;
         position: fixed;
@@ -30,26 +26,19 @@ const Modal: React.FC<Props> = ( { className, escapeable, children } ) => {
         width: 100%;
         height: 100%;
         background-color: rgba( 0, 0, 0, 0.6 );
-
+        z-index: 2000;
+        opacity: ${ isVisible ? 1 : 0 };
+        transition: opacity 0.3s ease;
     `
 
+    const root = document.getElementById( 'root' )
+    if ( !root ) return null
+
     return ReactDOM.createPortal( (
-        <Transition
-          items={ show }
-          from={ { opacity: '0' } }
-          enter={ { opacity: '1' } }
-          leave={ { opacity: '0' } }
-        >
-            {
-                item => props => (
-                    <div onClick={ e => e.stopPropagation() } style={ props } className={ cx( className, stylez ) }>
-                        { children }
-                    </div>
-                )
-            }
-        </Transition>
-    ),
-    document.getElementById( 'root' ) )
+        <div onClick={ e => e.stopPropagation() } className={ cx( className, stylez ) }>
+            { children }
+        </div>
+    ), root )
 }
 
 export default Modal
