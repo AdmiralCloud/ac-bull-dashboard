@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { css, cx } from 'emotion'
-import { Close } from '@material-ui/icons'
+import React, { useState, useContext } from 'react'
+import { css, cx } from '@emotion/css'
 
 import { OptionsContext } from '../../context/OptionsContextProvider'
 
@@ -30,6 +29,7 @@ const JobListItemDeleteJobButton: React.FC<Props> = ( { className, status, jobId
         display: flex;
         justify-content: center;
         align-items: center;
+        color: white;
     `
 
     const handleConfirmDeletion = () => {
@@ -37,14 +37,13 @@ const JobListItemDeleteJobButton: React.FC<Props> = ( { className, status, jobId
         deleteJob( env, jobList, jobId )
             .then( () => { } )
             .catch( () => setDeletionError( true ) )
-        showPop && setShowPop( false )
+        if ( showPop ) setShowPop( false )
     }
 
     const handleClick = () => {
         if ( status !== 'active' ) {
             handleConfirmDeletion()
         } else {
-            console.log( 'dasdad' )
             setShowPop( true )
         }
     }
@@ -55,9 +54,14 @@ const JobListItemDeleteJobButton: React.FC<Props> = ( { className, status, jobId
               backgroundColor: deletionError
                   ? colors.warning : deletionPending
                       ? colors.pending : colors.warning,
-          } } className={ cx( className, stylez, deletionPending && 'deletion_pending', deletionError && 'deletion_error' ) } onClick={ handleClick }
+          } }
+          className={ cx( className, stylez, deletionPending && 'deletion_pending', deletionError && 'deletion_error' ) }
+          onClick={ handleClick }
         >
-            <Close />
+            <svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
+                <line x1='18' y1='6' x2='6' y2='18' />
+                <line x1='6' y1='6' x2='18' y2='18' />
+            </svg>
             {
                 showPop && (
                     <PopUp
