@@ -27,7 +27,7 @@
     "ac-app-authenticator": "git+ssh://git@ac-app-authenticator.github.com/mmpro/ac-app-authenticator.git#v3.0.14",
     "axios": "^0.19.2",
     "emotion": "^10.0.27",
-    "lodash-es": "^4.17.15",
+    "lodash-es": "^4.17.21",
     "moment": "^2.24.0",
     "node-sass": "^4.13.1",
     "react": "^16.13.1",
