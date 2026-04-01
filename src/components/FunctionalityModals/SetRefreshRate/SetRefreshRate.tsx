@@ -1,12 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { css, cx } from 'emotion'
-import InputLabel from '@material-ui/core/InputLabel'
-import MenuItem from '@material-ui/core/MenuItem'
-import FormControl from '@material-ui/core/FormControl'
-import Select from '@material-ui/core/Select'
+import React, { useState, useContext } from 'react'
+import { css, cx } from '@emotion/css'
 
 import { OptionsContext } from '../../../context/OptionsContextProvider'
-import PopUpMessage from '@components/PopUpMessage/PopUpMessage'
 import { refreshRates } from '../../../../config/refreshRates'
 
 export interface Props {
@@ -15,31 +10,78 @@ export interface Props {
 }
 
 const SetRefreshRate: React.FC<Props> = ( { className, close } ) => {
-    const { env, refreshInterval, setRefreshInterval } = useContext( OptionsContext )
+    const { refreshInterval, setRefreshInterval } = useContext( OptionsContext )
     const [ selectedRefreshRate, setSelectedRefreshRate ] = useState( refreshInterval )
 
     const stylez = css`
         background: white;
         padding: 16px 32px;
         text-align: center;
+        border-radius: 4px;
 
         .description {
-            margin-bottom: 8px;
+            margin-bottom: 16px;
+            font-size: 1rem;
         }
 
-        .shallow {
-            background-color: transparent;
-            border: 1px solid black;
-            color: black;
+        .select_wrapper {
+            margin-bottom: 24px;
+            text-align: left;
         }
 
-        #demo-simple-select {
-            width: 260px;
+        label {
+            display: block;
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        select {
+            width: 100%;
+            min-width: 260px;
+            padding: 8px 0;
+            border: none;
+            border-bottom: 1px solid #949494;
+            font-size: 1rem;
+            background: transparent;
+            outline: none;
+            cursor: pointer;
+
+            &:hover {
+                border-bottom-color: #000;
+            }
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 8px 24px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+            background: #2196f3;
+            color: white;
+            transition: opacity 0.2s;
+
+            &:hover {
+                opacity: 0.8;
+            }
+
+            &.shallow {
+                background: transparent;
+                border: 1px solid #2196f3;
+                color: #2196f3;
+            }
         }
     `
 
-    const handleChange = ( event: React.ChangeEvent<{ value: string }> ) => {
-        setSelectedRefreshRate( parseInt( event.target.value ) as number )
+    const handleChange = ( event: React.ChangeEvent<HTMLSelectElement> ) => {
+        setSelectedRefreshRate( parseInt( event.target.value ) )
     }
 
     const handleConfirm = () => {
@@ -52,21 +94,16 @@ const SetRefreshRate: React.FC<Props> = ( { className, close } ) => {
             <div className='description'>
                 Refresh list every:
             </div>
-            <FormControl>
-                <InputLabel id='demo-simple-select-label'>Refresh Rate</InputLabel>
-                <Select
-                  labelId='demo-simple-select-label'
-                  id='demo-simple-select'
-                  value={ selectedRefreshRate }
-                  onChange={ handleChange }
-                >
+            <div className='select_wrapper'>
+                <label>Refresh Rate</label>
+                <select value={ selectedRefreshRate } onChange={ handleChange }>
                     {
                         refreshRates.map( refreshRate => (
-                            <MenuItem key={ refreshRate } value={ refreshRate }>{ refreshRate / 1000 } seconds</MenuItem>
+                            <option key={ refreshRate } value={ refreshRate }>{ refreshRate / 1000 } seconds</option>
                         ) )
                     }
-                </Select>
-            </FormControl>
+                </select>
+            </div>
             <div className='buttons'>
                 <div className='btn shallow' onClick={ () => close() }>Cancel</div>
                 <div className='btn' onClick={ handleConfirm }>Ok</div>

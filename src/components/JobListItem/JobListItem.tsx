@@ -1,15 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-import { css, cx } from 'emotion'
-import moment from 'moment'
+import { css, cx } from '@emotion/css'
+import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
-
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper'
 
 import { statusConfig } from '../../../config/statusConfig'
 
@@ -23,18 +15,18 @@ import { DataContext } from '../../context/DataContextProvider'
 import { DataHeightsContext } from '../JobList/JobList'
 
 export interface Props {
-    index?: number
-    data?: any
-    style?: any
-    onClick: ( index ) => void
+    index: number
+    style: any
 }
 
 const JobListItem: React.FC<Props> = ( {
-    data,
     index,
     style,
 } ) => {
     const { shownData } = useContext( DataContext )
+    const job = shownData[ index ]
+    if ( !job ) return null
+
     const {
         status,
         jobList,
@@ -47,21 +39,18 @@ const JobListItem: React.FC<Props> = ( {
         data: jobdata,
         opts,
         failedReason,
-    } = shownData[ index ]
-    console.log(51, jobdata)
-    const itemRef = useRef( null )
+    } = job
+
+    const itemRef = useRef<HTMLDivElement>( null )
     const { listRef, itemDataState, updateItem } = useContext( DataHeightsContext )
     const [ itemKey ] = useState( uuidv4() )
 
-    // const [ isOpen, setIsOpen ] = useState( itemDataState[ jobId ]?.isOpen )
-
     useEffect( () => {
-        if ( itemDataState[ jobId ]?.height !== itemRef.current.offsetHeight ) {
+        if ( itemRef.current && itemDataState[ jobId ]?.height !== itemRef.current.offsetHeight ) {
             updateItem( jobId, {
-                height: parseInt( itemRef.current.offsetHeight ),
-                // isOpen,
+                height: itemRef.current.offsetHeight,
             } )
-            listRef.current.resetAfterIndex( 0 )
+            if ( listRef.current ) listRef.current.resetAfterIndex( 0 )
         }
     }, [ jobId, listRef, itemDataState, updateItem ] )
 
@@ -74,21 +63,14 @@ const JobListItem: React.FC<Props> = ( {
     }
 
     const handleOpen = () => {
-        // setIsOpen( true )
-        updateItem( jobId, {
-            isOpen: true,
-        } )
+        updateItem( jobId, { isOpen: true } )
     }
 
     const handleClose = () => {
-        // setIsOpen( false )
-        updateItem( jobId, {
-            isOpen: false,
-        } )
+        updateItem( jobId, { isOpen: false } )
     }
 
     const stylez = css`
-
         box-sizing: border-box;
         position: relative;
         padding-left: 30px;
@@ -105,6 +87,7 @@ const JobListItem: React.FC<Props> = ( {
             width: 100%;
             color: #ceecff;
             background-color: #414248;
+            cursor: pointer;
 
             .basic_content_inner {
                 width: 100%;
@@ -137,7 +120,7 @@ const JobListItem: React.FC<Props> = ( {
             text-align: left;
             padding: 0 132px 0 32px;
             font-weight: lighter;
-            font-size: 0.825em
+            font-size: 0.825em;
         }
 
         .mid_row {
@@ -148,6 +131,8 @@ const JobListItem: React.FC<Props> = ( {
             border-top: 2px solid rgba( 0,0,0,0.3 );
             padding: 16px 32px;
             box-shadow: inset 0px 1px 3px 0px rgba( 0,0,0,0.3 );
+            background: #fff;
+            color: #333;
         }
 
         .progress_overview {
@@ -162,7 +147,6 @@ const JobListItem: React.FC<Props> = ( {
             padding-left: 2px;
             height: 70px;
             border-left: 1px solid rgba( 0,0,0,0.3 );
-            /* pointer-events: none; */
 
             .actions {
                 display: flex;
@@ -171,11 +155,38 @@ const JobListItem: React.FC<Props> = ( {
             }
         }
 
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+
+            th {
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+                padding: 8px;
+                color: #666;
+            }
+
+            td {
+                padding: 8px;
+                border-bottom: 1px solid #eee;
+            }
+        }
+
+        pre {
+            background: #f8f8f8;
+            padding: 12px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            border: 1px solid #ddd;
+        }
     `
 
     const renderStatus = () => {
         return (
-            <div style={ { backgroundColor: statusConfig[ status ] && statusConfig[ status ].color } } className={ cx( 'status_indicator' ) } />
+            <div style={ { backgroundColor: statusConfig[ status ]?.color } } className={ cx( 'status_indicator' ) } />
         )
     }
 
@@ -216,32 +227,30 @@ const JobListItem: React.FC<Props> = ( {
                 {
                     itemDataState[ jobId ]?.isOpen && (
                         <div className='extra_content'>
-                            <TableContainer component={ Paper }>
-                                <Table size='small' aria-label='a dense table'>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Created</TableCell>
-                                            <TableCell>Waited</TableCell>
-                                            <TableCell>Processed</TableCell>
-                                            <TableCell>Finished</TableCell>
-                                            <TableCell>Run</TableCell>
-                                            <TableCell>Attempts</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        <TableRow key=''>
-                                            <TableCell>{ timestamp && moment( timestamp ).fromNow() }</TableCell>
-                                            <TableCell>{ processedOn && timestamp && ( `${ processedOn - timestamp }ms` ) }</TableCell>
-                                            <TableCell>{ processedOn && moment( processedOn ).format( 'HH:mm:ss - DD.MM.YY' ) }</TableCell>
-                                            <TableCell>{ finishedOn && moment( finishedOn ).format( 'HH:mm:ss - DD.MM.YY' ) }</TableCell>
-                                            <TableCell>{ finishedOn && processedOn && ( `${ finishedOn - processedOn }ms` ) }</TableCell>
-                                            <TableCell>{ opts?.attempts }</TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Created</th>
+                                        <th>Waited</th>
+                                        <th>Processed</th>
+                                        <th>Finished</th>
+                                        <th>Run</th>
+                                        <th>Attempts</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{ timestamp && moment( timestamp ).fromNow() }</td>
+                                        <td>{ processedOn && timestamp && ( `${ processedOn - timestamp }ms` ) }</td>
+                                        <td>{ processedOn && moment( processedOn ).format( 'HH:mm:ss - DD.MM.YY' ) }</td>
+                                        <td>{ finishedOn && moment( finishedOn ).format( 'HH:mm:ss - DD.MM.YY' ) }</td>
+                                        <td>{ finishedOn && processedOn && ( `${ finishedOn - processedOn }ms` ) }</td>
+                                        <td>{ opts?.attempts }</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                             <pre>
-                                { JSON.stringify( shownData[ index ], null, 4 ) }
+                                { JSON.stringify( job, null, 4 ) }
                             </pre>
                         </div>
                     )

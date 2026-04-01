@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext, useCallback } from 'react'
-import { css, cx } from 'emotion'
+import { css, cx } from '@emotion/css'
 import { VariableSizeList as List } from 'react-window'
 
 import { DataContext } from '../../context/DataContextProvider'
@@ -16,57 +16,63 @@ export interface Props {
 }
 
 const JobList: React.FC<Props> = ( { className } ) => {
-    const listWrapperRef = useRef( null )
-    const listRef = useRef( null )
-    const legendRef = useRef( null )
+    const listWrapperRef = useRef<HTMLDivElement>( null )
+    const listRef = useRef<any>( null )
+    const legendRef = useRef<HTMLDivElement>( null )
     const { shownData } = useContext( DataContext )
-    const [ itemDataState, setItemDataState ] = useState( {} )
+    const [ itemDataState, setItemDataState ] = useState<any>( {} )
     const [ listHeight, setListHeight ] = useState( 0 )
 
-    useEffect( () => {
-        listRef.current.resetAfterIndex( 0 )
-    }, [ shownData ] )
+    const setListHeightLocale = useCallback( () => {
+        if ( listWrapperRef.current && legendRef.current ) {
+            // Subtracting 1px to be safe against sub-pixel rounding that causes scrollbars
+            const calculatedHeight = listWrapperRef.current.offsetHeight - legendRef.current.offsetHeight - 1
+            setListHeight( Math.max( 0, calculatedHeight ) )
+        }
+    }, [] )
 
-    const setListHeightLocale = () => {
-        setListHeight( listWrapperRef.current.offsetHeight - legendRef.current.offsetHeight )
-    }
+    useEffect( () => {
+        if ( listRef.current ) {
+            listRef.current.resetAfterIndex( 0 )
+        }
+    }, [ shownData ] )
 
     useEffect( () => {
         setListHeightLocale()
-        window.addEventListener( 'resize', setListHeightLocale )
-        return () => window.removeEventListener( 'resize', setListHeightLocale )
-    }, [] )
+        const observer = new ResizeObserver( setListHeightLocale )
+        if ( listWrapperRef.current ) {
+            observer.observe( listWrapperRef.current )
+        }
+        return () => observer.disconnect()
+    }, [ setListHeightLocale ] )
 
-    const getSize = ( index ) => {
-        const jobId = shownData[ index ].jobId
+    const getSize = ( index: number ) => {
+        const jobId = shownData[ index ]?.jobId
         return itemDataState[ jobId ]?.height || 90
     }
 
-    const updateItem = useCallback( ( jobId, options ) => {
-        const newState = { ...itemDataState[ jobId ] }
-
-        const { height, isOpen } = options
-        if ( height ) {
-            newState.height = height
-        }
-        if ( isOpen !== undefined ) {
-            newState.isOpen = isOpen
-        }
-        setItemDataState( {
-            ...itemDataState,
-            [ jobId ]: newState,
+    const updateItem = useCallback( ( jobId: string, options: any ) => {
+        setItemDataState( ( prevState: any ) => {
+            const newState = { ...prevState[ jobId ] }
+            const { height, isOpen } = options
+            if ( height ) newState.height = height
+            if ( isOpen !== undefined ) newState.isOpen = isOpen
+            return {
+                ...prevState,
+                [ jobId ]: newState,
+            }
         } )
-    }, [ itemDataState ] )
+    }, [] )
 
     const stylez = css`
-
-        /* box-sizing: border-box; */
         height: 100%;
         position: relative;
+        overflow: hidden;
 
         .list_wrapper{
-            /* padding-top: 80px; */
             height: 100%;
+            display: flex;
+            flex-direction: column;
             box-sizing: border-box;
         }
 
@@ -75,6 +81,7 @@ const JobList: React.FC<Props> = ( { className } ) => {
         }
 
         .legend {
+            flex-shrink: 0;
             background-color: #29282f;
             border-bottom: 1px solid rgba( 255,255,255,0.9 );
             padding: 8px;
@@ -100,6 +107,9 @@ const JobList: React.FC<Props> = ( { className } ) => {
             }
         }
 
+        .react_window_list {
+            flex-grow: 1;
+        }
     `
 
     return (
@@ -134,15 +144,18 @@ const JobList: React.FC<Props> = ( { className } ) => {
                             <div className='lower '>Media Title</div>
                         </div>
                     </div>
-                    <List
-                      height={ listHeight }
-                      itemCount={ shownData.length }
-                      itemSize={ getSize }
-                      width='100%'
-                      ref={ listRef }
-                    >
-                        { JobListItem }
-                    </List>
+                    { listHeight > 0 && (
+                        <List
+                          className='react_window_list'
+                          height={ listHeight }
+                          itemCount={ shownData.length }
+                          itemSize={ getSize }
+                          width='100%'
+                          ref={ listRef }
+                        >
+                            { JobListItem }
+                        </List>
+                    ) }
                 </div>
             </DataHeightsContext.Provider>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { css, cx, injectGlobal } from 'emotion'
+import { css, cx, injectGlobal } from '@emotion/css'
 import { authStore } from 'ac-app-authenticator'
 
 import { simulateJob } from './api/calls/simulateJob'

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
-import { css, cx } from 'emotion'
+import { css, cx } from '@emotion/css'
 
 import { getJobs } from '../../api/calls/getJobs'
 

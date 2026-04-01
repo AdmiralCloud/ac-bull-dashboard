@@ -1,48 +1,76 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { css, cx } from 'emotion'
-import Grid from '@material-ui/core/Grid'
-import SearchIcon from '@material-ui/icons/Search'
-import TextField from '@material-ui/core/TextField'
+import React, { useContext } from 'react'
+import { css, cx } from '@emotion/css'
 
 import { FilterContext } from '../../context/FilterContextProvider'
-import { searchConfig } from '../../../config/search'
 
 export interface Props {
     className?: string;
 }
 
-const searchRegExpArray = []
-
-for ( const [ key, val ] of Object.entries( searchConfig ) ) {
-    searchRegExpArray.push( { regExp: new RegExp( `^${ val.prefix }\\d+$` ), filterKey: key, prefixRegExp: new RegExp( `^${ val.prefix }` ) } )
-}
-
 const Search: React.FC<Props> = ( { className } ) => {
     const { setFilter } = useContext( FilterContext )
 
-    const handleSearch = ( e ) => {
+    const handleSearch = ( e: React.ChangeEvent<HTMLInputElement> ) => {
         const currentValue = e.target.value
         setFilter( { search: currentValue } )
     }
 
     const stylez = css`
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        gap: 8px;
+        width: 260px;
+        padding-top: 20px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #949494;
+        margin-right: 16px;
 
-        #input-with-icon-grid {
-            min-width: 260px;
+        &:hover {
+            border-bottom-color: #000;
         }
 
+        input {
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            width: 100%;
+            padding: 0;
+            font-family: inherit;
+
+            &::placeholder {
+                color: #aaa;
+            }
+        }
+
+        .label {
+            position: absolute;
+            transform: translateY(-20px);
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .icon {
+            color: #666;
+            display: flex;
+            align-items: center;
+        }
     `
 
     return (
         <div className={ cx( className, stylez ) }>
-            <Grid container spacing={ 1 } alignItems='flex-end'>
-                <Grid item>
-                    <SearchIcon />
-                </Grid>
-                <Grid item>
-                    <TextField placeholder='c147' id='input-with-icon-grid' label='Search' onChange={ handleSearch } />
-                </Grid>
-            </Grid>
+            <div className='label'>Search</div>
+            <div className='icon'>
+                <svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
+                    <circle cx='11' cy='11' r='8' />
+                    <line x1='21' y1='21' x2='16.65' y2='16.65' />
+                </svg>
+            </div>
+            <input
+              type='text'
+              placeholder='c147'
+              onChange={ handleSearch }
+            />
         </div>
     )
 }
