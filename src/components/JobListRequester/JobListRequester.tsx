@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react'
+import React, { useRef, useEffect, useContext, useCallback } from 'react'
 import { css, cx } from '@emotion/css'
 
 import { getJobs } from '../../api/calls/getJobs';
@@ -13,12 +13,11 @@ export interface Props {
 const JobListRequester: React.FC<Props> = ({ className }) => {
     const { env, refreshInterval } = useContext(OptionsContext);
     const { setData } = useContext(DataContext);
-    const [isRequesting, setIsRequesting] = useState(false); // State to track if request is in progress
+    const isRequesting = useRef(false);
 
     const requestJobs = useCallback(() => {
-        // Only proceed if no request is currently in progress
-        if (!isRequesting) {
-            setIsRequesting(true); // Mark that a request is in progress
+        if (!isRequesting.current) {
+            isRequesting.current = true;
             getJobs(env)
                 .then((res) => {
                     const sortedData = [...res.data].sort((a, b) => {
@@ -31,10 +30,10 @@ const JobListRequester: React.FC<Props> = ({ className }) => {
                     console.error(err);
                 })
                 .finally(() => {
-                    setIsRequesting(false); // Reset the requesting state
+                    isRequesting.current = false;
                 });
         }
-    }, [env, setData, isRequesting]);
+    }, [env, setData]);
 
     useEffect(() => {
         requestJobs();
