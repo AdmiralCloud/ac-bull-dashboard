@@ -1,3 +1,14 @@
+
+## [0.1.2](https://github.com/admiralcloud/ac-bull-dashboard/compare/v0.1.1..v0.1.2) (2026-04-01 14:56:43)
+
+
+### Bug Fix
+
+* **App:** Use ac-semantic-release managemr | MP | [a5c136d9793634dddc0e080ed14609330271f467](https://github.com/admiralcloud/ac-bull-dashboard/commit/a5c136d9793634dddc0e080ed14609330271f467)    
+Use ac-semantic-release manager
+* **App:** Several fixes | MP | [a9b537df0631cb0cd273b82c6bd14ee2ca8d2c5c](https://github.com/admiralcloud/ac-bull-dashboard/commit/a9b537df0631cb0cd273b82c6bd14ee2ca8d2c5c)    
+Several fixes  
+Related issues:
 <a name="0.1.1"></a>
 
 ## [0.1.1](https://github.com/mmpro/ac-bull-dashboard/compare/v0.1.0..v0.1.1) (2020-04-28 18:13:46)
