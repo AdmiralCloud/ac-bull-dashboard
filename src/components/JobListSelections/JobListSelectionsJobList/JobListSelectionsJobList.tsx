@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { css, cx } from '@emotion/css'
 
 import { DataContext } from '../../../context/DataContextProvider'
 import { FilterContext } from '../../../context/FilterContextProvider'
 import MultiSelect from '../../MultiSelect'
+import styles from './JobListSelectionsJobList.module.css'
 
 export interface Props {
     className?: string;
@@ -30,11 +30,6 @@ const JobListSelectionsJobList: React.FC<Props> = ( { className } ) => {
         } )
     }, [ curValue, setFilter ] )
 
-    const stylez = css`
-        width: 260px;
-        max-width: 260px;
-    `
-
     const options = availableJobLists.map( availableJobListItem => ( {
         label: availableJobListItem,
         value: availableJobListItem,
@@ -42,7 +37,7 @@ const JobListSelectionsJobList: React.FC<Props> = ( { className } ) => {
     } ) )
 
     return (
-        <div className={ cx( className, stylez ) }>
+        <div className={ [ className, styles.wrapper ].filter( Boolean ).join( ' ' ) }>
             <MultiSelect
               label='JobLists'
               options={ options }

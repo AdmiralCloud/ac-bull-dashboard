@@ -1,0 +1,48 @@
+.list {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.list_wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.hacky_space {
+    opacity: 0;
+}
+
+.legend {
+    flex-shrink: 0;
+    background-color: #29282f;
+    border-bottom: 1px solid rgba(255,255,255,0.9);
+    padding: 8px;
+    padding-left: 62px;
+    padding-right: 132px;
+    color: white;
+}
+
+.upper {
+    font-size: 1.3rem;
+}
+
+.lower,
+.mid {
+    font-size: 0.825rem;
+    font-weight: lighter;
+}
+
+.mid {
+    margin-bottom: 8px;
+}
+
+.title_job_list {
+    font-weight: bold;
+}
+
+.react_window_list {
+    flex-grow: 1;
+}

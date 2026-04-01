@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { css, cx } from '@emotion/css'
+
+import styles from './IndicatorCircle.module.css'
 
 export interface Props {
     className?: string;
@@ -43,18 +44,6 @@ const IndicatorCircle: React.FC<Props> = ( {
         }
     }, [ calculateDashOffset ] )
 
-    const stylez = css`
-
-        .circle {
-            transition: all ${ animationDuration }ms, stroke 300ms;
-            fill: transparent;
-            transform: rotate(-90deg);
-            transform-origin: center;
-            stroke: ${ circleColor };
-        }
-
-    `
-
     const circleInlineStyles = {
         strokeDasharray: `${ dashArray }`,
         strokeDashoffset: `${ dashArray }`,
@@ -67,10 +56,13 @@ const IndicatorCircle: React.FC<Props> = ( {
     }
 
     return (
-        <div className={ cx( className, stylez ) }>
+        <div
+          className={ [ className, styles.wrapper ].filter( Boolean ).join( ' ' ) }
+          style={ { '--animation-duration': `${ animationDuration }ms`, '--circle-color': circleColor } as React.CSSProperties }
+        >
             <svg height={ r * 2 } width={ r * 2 }>
-                <circle strokeWidth={ width } className='circle' cx={ r } cy={ r } r={ r - width } />
-                <circle ref={ animatedCircleRef } style={ circleInlineStyles } className='circle' cx={ r } cy={ r } r={ r - width } />
+                <circle strokeWidth={ width } className={ styles.circle } cx={ r } cy={ r } r={ r - width } />
+                <circle ref={ animatedCircleRef } style={ circleInlineStyles } className={ styles.circle } cx={ r } cy={ r } r={ r - width } />
                 {showValue && renderText()}
             </svg>
         </div>

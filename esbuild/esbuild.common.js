@@ -37,6 +37,7 @@ function esbuild_config(BUILD_DIR, IS_PRODUCTION) {
             '.woff2': 'file',
             '.ttf': 'file',
             '.svg': 'file',
+            '.module.css': 'local-css',
         },
 
         plugins: [
