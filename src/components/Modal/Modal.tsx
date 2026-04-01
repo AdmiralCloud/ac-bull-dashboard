@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import { css, cx } from '@emotion/css'
+
+import styles from './Modal.module.css'
 
 export interface Props {
     className?: string;
@@ -16,26 +17,15 @@ const Modal: React.FC<Props> = ( { className, children } ) => {
         return () => setIsVisible( false )
     }, [] )
 
-    const stylez = css`
-        top: 0;
-        left: 0;
-        position: fixed;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        background-color: rgba( 0, 0, 0, 0.6 );
-        z-index: 2000;
-        opacity: ${ isVisible ? 1 : 0 };
-        transition: opacity 0.3s ease;
-    `
-
     const root = document.getElementById( 'root' )
     if ( !root ) return null
 
     return ReactDOM.createPortal( (
-        <div onClick={ e => e.stopPropagation() } className={ cx( className, stylez ) }>
+        <div
+          onClick={ e => e.stopPropagation() }
+          className={ [ className, styles.modal ].filter( Boolean ).join( ' ' ) }
+          style={ { opacity: isVisible ? 1 : 0 } }
+        >
             { children }
         </div>
     ), root )

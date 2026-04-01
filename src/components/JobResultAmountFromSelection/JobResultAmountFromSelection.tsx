@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { css, cx } from '@emotion/css'
+import React, { useContext } from 'react'
 
 import { DataContext } from '../../context/DataContextProvider'
+import styles from './JobResultAmountFromSelection.module.css'
 
 export interface Props {
     className?: string;
@@ -10,14 +10,8 @@ export interface Props {
 const JobResultAmountFromSelection: React.FC<Props> = ( { className } ) => {
     const { shownData } = useContext( DataContext )
 
-    const stylez = css`
-
-        margin: 8px 0 4px;
-
-    `
-
     return (
-        <div className={ cx( className, stylez ) }>
+        <div className={ [ className, styles.wrapper ].filter( Boolean ).join( ' ' ) }>
             Results: { shownData.length }
         </div>
     )

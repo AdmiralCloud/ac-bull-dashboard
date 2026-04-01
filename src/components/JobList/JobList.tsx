@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useContext, useCallback } from 'react'
-import { css, cx } from '@emotion/css'
 import { VariableSizeList as List } from 'react-window'
 
 import { DataContext } from '../../context/DataContextProvider'
 import JobListItem from '@components/JobListItem/JobListItem'
+import styles from './JobList.module.css'
 
 export const DataHeightsContext = React.createContext( {
     updateItem: ( ( jobId, options ) => null ) as ( ( jobId: string, options: { height?: number, isOpen?: boolean } ) => void ),
@@ -64,56 +64,8 @@ const JobList: React.FC<Props> = ( { className } ) => {
         } )
     }, [] )
 
-    const stylez = css`
-        height: 100%;
-        position: relative;
-        overflow: hidden;
-
-        .list_wrapper{
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            box-sizing: border-box;
-        }
-
-        .hacky_space {
-            opacity: 0;
-        }
-
-        .legend {
-            flex-shrink: 0;
-            background-color: #29282f;
-            border-bottom: 1px solid rgba( 255,255,255,0.9 );
-            padding: 8px;
-            padding-left: 62px;
-            padding-right: 132px;
-            color: white;
-
-            .upper {
-                font-size: 1.3rem;
-            }
-
-            .lower, .mid {
-                font-size: 0.825rem;
-                font-weight: lighter;
-            }
-
-            .mid {
-                margin-bottom: 8px;
-            }
-
-            .title_job_list {
-                font-weight: bold;
-            }
-        }
-
-        .react_window_list {
-            flex-grow: 1;
-        }
-    `
-
     return (
-        <div ref={ listWrapperRef } className={ cx( className, stylez ) }>
+        <div ref={ listWrapperRef } className={ [ className, styles.list ].filter( Boolean ).join( ' ' ) }>
             <DataHeightsContext.Provider
               value={ {
                   itemDataState,
@@ -121,32 +73,32 @@ const JobList: React.FC<Props> = ( { className } ) => {
                   listRef,
               } }
             >
-                <div className='list_wrapper'>
-                    <div className='legend' ref={ legendRef }>
+                <div className={ styles.list_wrapper }>
+                    <div className={ styles.legend } ref={ legendRef }>
                         <div className='inline w20pc title_job_list_updated_at'>
-                            <div className='upper title_job_list'>Job Type</div>
-                            <div className='mid title_job_type'>Job List</div>
-                            <div className='lower title_updated_at'>Last Updated At</div>
+                            <div className={ `${ styles.upper } ${ styles.title_job_list }` }>Job Type</div>
+                            <div className={ `${ styles.mid } ${ styles.hacky_space }` }>-</div>
+                            <div className={ styles.lower }>Last Updated At</div>
                         </div>
                         <div className='inline w40pc title_job_list_updated_at'>
-                            <div className='upper title_job_id'>Job ID</div>
-                            <div className='mid hacky_space'>-</div>
-                            <div className='lower title_priority'>Attempts | Priority | Status-Text</div>
+                            <div className={ styles.upper }>Job ID</div>
+                            <div className={ `${ styles.mid } ${ styles.hacky_space }` }>-</div>
+                            <div className={ styles.lower }>Attempts | Priority | Status-Text</div>
                         </div>
                         <div className='inline w20pc title_job_list_updated_at'>
-                            <div className='upper title_customer'>Customer</div>
-                            <div className='mid hacky_space'>-</div>
-                            <div className='lower title_worker'>Worker</div>
+                            <div className={ styles.upper }>Customer</div>
+                            <div className={ `${ styles.mid } ${ styles.hacky_space }` }>-</div>
+                            <div className={ styles.lower }>Worker</div>
                         </div>
                         <div className='inline w20pc title_job_list_updated_at'>
-                            <div className='upper title_customer'>MC | Media</div>
-                            <div className='mid title_format_id'>Format</div>
-                            <div className='lower '>Media Title</div>
+                            <div className={ styles.upper }>MC | Media</div>
+                            <div className={ styles.mid }>Format</div>
+                            <div className={ styles.lower }>Media Title</div>
                         </div>
                     </div>
                     { listHeight > 0 && (
                         <List
-                          className='react_window_list'
+                          className={ styles.react_window_list }
                           height={ listHeight }
                           itemCount={ shownData.length }
                           itemSize={ getSize }

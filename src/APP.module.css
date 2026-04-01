@@ -1,0 +1,30 @@
+.app {
+    margin: 0 auto;
+    max-width: 1400px;
+    height: 100%;
+}
+
+.menu_content {
+    height: 114px;
+    padding: 8px 0;
+    box-sizing: border-box;
+}
+
+.joblist_content {
+    height: calc(100% - 114px);
+    position: relative;
+}
+
+.split_content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.filter {
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.filter > div {
+    margin-right: 32px;
+}

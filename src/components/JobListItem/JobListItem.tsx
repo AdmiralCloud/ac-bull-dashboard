@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-import { css, cx } from '@emotion/css'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -13,6 +12,8 @@ import FailedJobMessageBox from './Parts/FailedJobMessageBox'
 
 import { DataContext } from '../../context/DataContextProvider'
 import { DataHeightsContext } from '../JobList/JobList'
+
+import styles from './JobListItem.module.css'
 
 export interface Props {
     index: number
@@ -70,154 +71,40 @@ const JobListItem: React.FC<Props> = ( {
         updateItem( jobId, { isOpen: false } )
     }
 
-    const stylez = css`
-        box-sizing: border-box;
-        position: relative;
-        padding-left: 30px;
-        transition: 0.0s;
-        overflow: hidden;
-        border-bottom: 2px solid rgba( 0,0,0,0.3 );
-
-        .basic_content {
-            position: relative;
-            height: 90px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            color: #ceecff;
-            background-color: #414248;
-            cursor: pointer;
-
-            .basic_content_inner {
-                width: 100%;
-            }
-        }
-
-        .status_indicator {
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 30px;
-            transition: background-color 300ms;
-            border-right: 1px solid black;
-        }
-
-        .job_title {
-            font-weight: bold;
-        }
-
-        .upper_row {
-            position: relative;
-            box-sizing: content-box;
-            font-size: 1.3em;
-            padding: 0 132px 0 32px;
-            text-align: left;
-        }
-
-        .lower_row, .mid_row {
-            text-align: left;
-            padding: 0 132px 0 32px;
-            font-weight: lighter;
-            font-size: 0.825em;
-        }
-
-        .mid_row {
-            margin-bottom: 8px;
-        }
-
-        .extra_content {
-            border-top: 2px solid rgba( 0,0,0,0.3 );
-            padding: 16px 32px;
-            box-shadow: inset 0px 1px 3px 0px rgba( 0,0,0,0.3 );
-            background: #fff;
-            color: #333;
-        }
-
-        .progress_overview {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 120px;
-            padding-right: 10px;
-            padding-left: 2px;
-            height: 70px;
-            border-left: 1px solid rgba( 0,0,0,0.3 );
-
-            .actions {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-            }
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 16px;
-            font-size: 0.9rem;
-
-            th {
-                text-align: left;
-                border-bottom: 1px solid #ddd;
-                padding: 8px;
-                color: #666;
-            }
-
-            td {
-                padding: 8px;
-                border-bottom: 1px solid #eee;
-            }
-        }
-
-        pre {
-            background: #f8f8f8;
-            padding: 12px;
-            border-radius: 4px;
-            overflow-x: auto;
-            font-size: 0.85rem;
-            border: 1px solid #ddd;
-        }
-    `
-
     const renderStatus = () => {
         return (
-            <div style={ { backgroundColor: statusConfig[ status ]?.color } } className={ cx( 'status_indicator' ) } />
+            <div style={ { backgroundColor: statusConfig[ status ]?.color } } className={ styles.status_indicator } />
         )
     }
 
     return (
-        <div key={ itemKey } className={ cx( stylez ) } style={ style }>
+        <div key={ itemKey } className={ styles.item } style={ style }>
             { renderStatus() }
             <div className='content' ref={ itemRef }>
-                <div className='basic_content' onClick={ handleClick }>
-                    <div className='basic_content_inner'>
-                        <div className='upper_row'>
-                            <div className='w20pc inline job_title'>{ jobdata?.type }</div>
+                <div className={ styles.basic_content } onClick={ handleClick }>
+                    <div className={ styles.basic_content_inner }>
+                        <div className={ styles.upper_row }>
+                            <div className={ `w20pc inline ${ styles.job_title }` }>{ jobdata?.type }</div>
                             <div className='w40pc inline job_id'>{ jobId }</div>
                             <div className='w20pc inline customer_id'>{ jobdata?.customerId || '-' }</div>
                             <div className='w20pc inline customer_id'>{ jobdata?.mediaContainerId || '-' } | { jobdata?.mediaId || '-' }</div>
                         </div>
-                        <div className='mid_row'>
+                        <div className={ styles.mid_row }>
                             <div className='w20pc inline job_type'>{ jobdata?.type !== jobList ? jobList : '' }</div>
                             <div className='w40pc inline' />
                             <div className='w20pc inline worker'>{}</div>
                             <div className='w20pc inline worker'>{ jobdata?.format?.id }</div>
                         </div>
-                        <div className='lower_row'>
+                        <div className={ styles.lower_row }>
                             <div className='w20pc inline last_updated'>{ moment( jobdata?.jobUpdated ).format( 'YYYY-MM-DD HH:mm:ss' ) }</div>
                             <div className='w40pc inline prio'>{ opts?.attempts || '-' } | { priority } | { jobdata?.statusText || '-' }</div>
                             <div className='w20pc inline worker'>{ jobdata?.worker }</div>
                             <div className='w20pc inline worker'>{ JSON.stringify( jobdata?.container_name?.find( i => i.title === 'container_name' )?.content ) }</div>
                         </div>
                     </div>
-                    <div className='progress_overview' onClick={ e => e.stopPropagation() }>
+                    <div className={ styles.progress_overview } onClick={ e => e.stopPropagation() }>
                         <ProgressIndicatorCircle status={ status } progress={ progress } />
-                        <div className='actions'>
+                        <div className={ styles.actions }>
                             <JobListItemDeleteJobButton jobList={ jobList } jobId={ jobId } status={ status } />
                             <JobListItemRestartJobButton jobList={ jobList } jobId={ jobId } status={ status } />
                         </div>
@@ -226,7 +113,7 @@ const JobListItem: React.FC<Props> = ( {
                 <FailedJobMessageBox status={ status } failedReason={ failedReason } />
                 {
                     itemDataState[ jobId ]?.isOpen && (
-                        <div className='extra_content'>
+                        <div className={ styles.extra_content }>
                             <table>
                                 <thead>
                                     <tr>

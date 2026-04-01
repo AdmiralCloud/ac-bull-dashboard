@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useContext, useCallback } from 'react'
-import { css, cx } from '@emotion/css'
 
 import { getJobs } from '../../api/calls/getJobs';
 
@@ -43,10 +42,8 @@ const JobListRequester: React.FC<Props> = ({ className }) => {
         return () => clearInterval(interval);
     }, [refreshInterval, requestJobs]);
 
-    const stylez = css``;
-
     return (
-        <div className={cx(className, stylez)} />
+        <div className={ className } />
     );
 }
 

@@ -1,0 +1,7 @@
+.wrapper .circle {
+    transition: all var(--animation-duration, 300ms), stroke 300ms;
+    fill: transparent;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    stroke: var(--circle-color, grey);
+}

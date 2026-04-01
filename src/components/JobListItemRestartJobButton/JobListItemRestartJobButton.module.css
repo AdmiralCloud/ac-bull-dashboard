@@ -1,0 +1,14 @@
+.button {
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.button.disabled {
+    cursor: not-allowed;
+    color: rgba(255,255,255,0.2);
+}

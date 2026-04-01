@@ -1,0 +1,13 @@
+.box {
+    background-color: #D9514EFF;
+    color: #414248;
+    padding: 8px 132px 8px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.reason {
+    display: inline-block;
+    padding-left: 8px;
+}

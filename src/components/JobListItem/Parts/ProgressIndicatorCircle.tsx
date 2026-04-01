@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { css, cx } from '@emotion/css'
+import React from 'react'
 import IndicatorCircle from '@components/IndicatorCircle/IndicatorCircle'
 
-import { colors } from '../../../../config/colors'
+import { colors } from '../../../../config/colors'
 
 export interface Props {
     className?: string
@@ -11,10 +10,8 @@ export interface Props {
 }
 
 const ProgressIndicatorCircle: React.FC<Props> = ( { status, className, progress } ) => {
-    const stylez = css``
-
     return (
-        <div className={ cx( className, stylez ) }>
+        <div className={ className }>
             <IndicatorCircle
               r={ 30 }
               animationDuration={ 0 }
