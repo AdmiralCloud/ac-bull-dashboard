@@ -1,4 +1,5 @@
 node_modules
 dist
+dist-dev
 yarn-error.log
 local.sh

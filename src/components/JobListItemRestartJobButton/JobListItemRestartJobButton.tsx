@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { css, cx } from 'emotion'
-import { Replay } from '@material-ui/icons'
+import React, { useContext } from 'react'
+import { css, cx } from '@emotion/css'
 
 import { OptionsContext } from '../../context/OptionsContextProvider'
 
@@ -17,11 +16,10 @@ const JobListItemRestartJobButton: React.FC<Props> = ( { className, jobList, job
     const { env } = useContext( OptionsContext )
 
     const handleRestart = () => {
-        status === 'failed' && restartJob( env, jobList, jobId )
+        if ( status === 'failed' ) restartJob( env, jobList, jobId )
     }
 
     const stylez = css`
-
         cursor: pointer;
         width: 28px;
         height: 28px;
@@ -38,7 +36,10 @@ const JobListItemRestartJobButton: React.FC<Props> = ( { className, jobList, job
 
     return (
         <div className={ cx( className, stylez, status !== 'failed' && 'disabled' ) } onClick={ handleRestart }>
-            <Replay />
+            <svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
+                <path d='M23 4v6h-6' />
+                <path d='M20.49 15a9 9 0 1 1-2.12-9.36L23 10' />
+            </svg>
         </div>
     )
 }

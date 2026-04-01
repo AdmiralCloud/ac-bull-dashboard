@@ -1,9 +1,13 @@
 import React from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import OptionsContextProvider from './context/OptionsContextProvider'
 
 import App from './APP'
-import './AppBaseStyles.scss'
+import './AppBaseStyles.css'
 
-render( <OptionsContextProvider><App /></OptionsContextProvider>, document.getElementById( 'root' ) )
+const container = document.getElementById( 'root' )
+if ( container ) {
+    const root = createRoot( container )
+    root.render( <OptionsContextProvider><App /></OptionsContextProvider> )
+}
