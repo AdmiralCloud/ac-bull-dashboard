@@ -232,15 +232,15 @@ const JobListItem: React.FC<Props> = ( {
                                         <TableRow key=''>
                                             <TableCell>{ timestamp && moment( timestamp ).fromNow() }</TableCell>
                                             <TableCell>{ processedOn && timestamp && ( `${ processedOn - timestamp }ms` ) }</TableCell>
-                                            <TableCell>{ processedOn && moment( processedOn ).format( 'HH:mm:ss - DD.MM.YY' ) }</TableCell>
-                                            <TableCell>{ finishedOn && moment( finishedOn ).format( 'HH:mm:ss - DD.MM.YY' ) }</TableCell>
+                                            <TableCell>{ processedOn && moment( processedOn ).format( 'YYYY-MM-DD HH:mm:ss' ) }</TableCell>
+                                            <TableCell>{ finishedOn && moment( finishedOn ).format( 'YYYY-MM-DD HH:mm:ss' ) }</TableCell>
                                             <TableCell>{ finishedOn && processedOn && ( `${ finishedOn - processedOn }ms` ) }</TableCell>
                                             <TableCell>{ opts?.attempts }</TableCell>
                                         </TableRow>
                                     </TableBody>
                                 </Table>
                             </TableContainer>
-                            <pre>
+                            <pre style={{ whiteSpace: 'pre-wrap' }}>
                                 { JSON.stringify( shownData[ index ], null, 4 ) }
                             </pre>
                         </div>
