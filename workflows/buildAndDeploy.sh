@@ -35,7 +35,7 @@ echo "YARN INSTALL"
 yarn install
 
 echo "BUILDING APP"
-node build.js
+yarn build
 
 echo "------------------------"
 echo "Starting AWS Operations with profile $PROFILE"
