@@ -1,4 +1,4 @@
-const fs = require('fs-extra');
+const fs = require('fs');
 const path = require('path');
 const { version } = require('../package.json');
 
@@ -82,7 +82,7 @@ function esbuild_config(BUILD_DIR, IS_PRODUCTION) {
                     build.onEnd((buildResult) => {
                         if (buildResult.errors.length > 0) return;
                         if (fs.existsSync(path.join(SRC_DIR, 'images'))) {
-                            fs.copySync(path.join(SRC_DIR, 'images'), path.join(BUILD_DIR, 'images'));
+                            fs.cpSync(path.join(SRC_DIR, 'images'), path.join(BUILD_DIR, 'images'), { recursive: true });
                         }
                     });
                 },

@@ -1,13 +1,12 @@
-import axios from 'axios'
-import { authStore } from 'ac-app-authenticator'
+import { apiDelete } from '../helper/apiFetch'
 
 import { hosts } from '../../../config/api/hosts'
 
 export const deleteJob = ( env: 'dev' | 'live', jobList, jobId? ) => {
-    if (jobId) {
-        return axios.delete( `${ hosts.jobs[ env ] }/v1/bull/${ jobList }/${ jobId }`, authStore.authedApiCallBaseConfig() )
+    if ( jobId ) {
+        return apiDelete( `${ hosts.jobs[ env ] }/v1/bull/${ jobList }/${ jobId }` )
     }
     else {
-        return axios.delete( `${ hosts.jobs[ env ] }/v1/bull/${ jobList }`, authStore.authedApiCallBaseConfig() )
+        return apiDelete( `${ hosts.jobs[ env ] }/v1/bull/${ jobList }` )
     }
 }

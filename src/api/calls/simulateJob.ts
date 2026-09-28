@@ -1,9 +1,9 @@
-import axios from 'axios'
-import { authStore } from 'ac-app-authenticator'
-import { random as lodashRandom } from 'lodash-es'
+import { apiGet } from '../helper/apiFetch'
 
 import { hosts } from '../../../config/api/hosts'
 
+const randomDuration = ( min: number, max: number ) => Math.floor( Math.random() * ( max - min + 1 ) ) + min
+
 export const simulateJob = ( env: 'dev' | 'live' ) => {
-    return axios.get( `${ hosts.jobs[ env ] }/v1/bull/simulateJob/miscActivities?duration=${ lodashRandom( 10, 120 ) }`, authStore.authedApiCallBaseConfig() )
+    return apiGet( `${ hosts.jobs[ env ] }/v1/bull/simulateJob/miscActivities?duration=${ randomDuration( 10, 120 ) }` )
 }

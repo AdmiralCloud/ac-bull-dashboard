@@ -1,7 +1,7 @@
 import React, { useState, useContext, useCallback } from 'react'
 import { DataContext } from './DataContextProvider'
 import { searchConfig } from '../../config/search'
-import { get as lodashGet } from 'lodash-es'
+import { getPath } from '../helper/getPath'
 
 export interface Props {
     className?: string;
@@ -69,7 +69,7 @@ const FilterContextProvider: React.FC<Props> = ( { children } ) => {
                 searchRegExpArray.forEach( ( searchRegExp ) => {
                     if ( searchPart.match( searchRegExp.regExp ) ) {
                         newData = newData.filter( ( nD ) => {
-                            const targetValue = lodashGet( nD, searchRegExp.dataPath )
+                            const targetValue = getPath( nD, searchRegExp.dataPath )
                             return targetValue === searchPart.replace( searchRegExp.prefixRegExp, '' )
                         } )
                     }
@@ -81,7 +81,7 @@ const FilterContextProvider: React.FC<Props> = ( { children } ) => {
                 searchRegExpArray.forEach( ( searchRegExp ) => {
                     if ( searchPart.match( searchRegExp.regExp ) ) {
                         newData = newData.filter( ( nD ) => {
-                            const targetValue = lodashGet( nD, searchRegExp.dataPath )
+                            const targetValue = getPath( nD, searchRegExp.dataPath )
                             return `${ targetValue }` === searchPart.replace( searchRegExp.prefixRegExp, '' )
                         } )
                     }

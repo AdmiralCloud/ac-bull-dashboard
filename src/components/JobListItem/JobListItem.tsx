@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { css, cx } from '@emotion/css'
-import moment from 'moment'
-import { v4 as uuidv4 } from 'uuid'
 
 import { statusConfig } from '../../../config/statusConfig'
+import { formatDateTime, fromNow } from '../../helper/formatDate'
 
 import JobListItemDeleteJobButton from '../JobListItemDeleteJobButton/JobListItemDeleteJobButton'
 import JobListItemRestartJobButton from '../JobListItemRestartJobButton/JobListItemRestartJobButton'
@@ -43,7 +42,7 @@ const JobListItem: React.FC<Props> = ( {
 
     const itemRef = useRef<HTMLDivElement>( null )
     const { listRef, itemDataState, updateItem } = useContext( DataHeightsContext )
-    const [ itemKey ] = useState( uuidv4() )
+    const [ itemKey ] = useState( crypto.randomUUID() )
 
     useEffect( () => {
         if ( itemRef.current && itemDataState[ jobId ]?.height !== itemRef.current.offsetHeight ) {
@@ -209,7 +208,7 @@ const JobListItem: React.FC<Props> = ( {
                             <div className='w20pc inline worker'>{ jobdata?.format?.id }</div>
                         </div>
                         <div className='lower_row'>
-                            <div className='w20pc inline last_updated'>{ moment( jobdata?.jobUpdated ).format( 'YYYY-MM-DD HH:mm:ss' ) }</div>
+                            <div className='w20pc inline last_updated'>{ formatDateTime( jobdata?.jobUpdated, 'YYYY-MM-DD HH:mm:ss' ) }</div>
                             <div className='w40pc inline prio'>{ opts?.attempts || '-' } | { priority } | { jobdata?.statusText || '-' }</div>
                             <div className='w20pc inline worker'>{ jobdata?.worker }</div>
                             <div className='w20pc inline worker'>{ JSON.stringify( jobdata?.container_name?.find( i => i.title === 'container_name' )?.content ) }</div>
@@ -240,10 +239,10 @@ const JobListItem: React.FC<Props> = ( {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{ timestamp && moment( timestamp ).fromNow() }</td>
+                                        <td>{ timestamp && fromNow( timestamp ) }</td>
                                         <td>{ processedOn && timestamp && ( `${ processedOn - timestamp }ms` ) }</td>
-                                        <td>{ processedOn && moment( processedOn ).format( 'HH:mm:ss - DD.MM.YY' ) }</td>
-                                        <td>{ finishedOn && moment( finishedOn ).format( 'HH:mm:ss - DD.MM.YY' ) }</td>
+                                        <td>{ processedOn && formatDateTime( processedOn, 'HH:mm:ss - DD.MM.YY' ) }</td>
+                                        <td>{ finishedOn && formatDateTime( finishedOn, 'HH:mm:ss - DD.MM.YY' ) }</td>
                                         <td>{ finishedOn && processedOn && ( `${ finishedOn - processedOn }ms` ) }</td>
                                         <td>{ opts?.attempts }</td>
                                     </tr>

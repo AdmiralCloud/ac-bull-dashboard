@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
-# Creates a local build and copies the content of the dist folder to a given S3 bucket
-#./workflows/buildToS3.sh -b BUCKETNAME [-p PROFILE]
+# Builds the contact management app (esbuild -> dist) and copies dist/ to a given S3 bucket
+#./workflows/buildAndDeploy.sh -b BUCKETNAME [-p PROFILE]
 
 FOLDER='dist'
 PROFILE="default"
@@ -16,15 +16,12 @@ case $key in
     shift # past argument
     shift # past value
     ;;
-    -cf|--cloudfront)
-    shift # past argument
-    shift # past value
-    ;;
     -p|--profile)
     PROFILE="$2"
     shift # past argument
     shift # past value
     ;;
+
 esac
 done
 
@@ -34,8 +31,11 @@ if [ -z $BUCKET ]
     exit
 fi
 
+echo "YARN INSTALL"
+yarn install
+
 echo "BUILDING APP"
-yarn build
+node build.js
 
 echo "------------------------"
 echo "Starting AWS Operations with profile $PROFILE"
@@ -48,4 +48,7 @@ aws s3 cp $FOLDER/index.html s3://$BUCKET --region eu-central-1 --profile $PROFI
 aws s3 cp "$FOLDER/index.html" "s3://$BUCKET/index_$(date +%Y-%m-%d_%H%M).html" --region eu-central-1 --profile "$PROFILE" --metadata-directive REPLACE --content-type text/html
 
 echo "COPY COMPLETE"
+echo "https://$BUCKET.s3-website.eu-central-1.amazonaws.com/"
 
+echo ""
+echo ""

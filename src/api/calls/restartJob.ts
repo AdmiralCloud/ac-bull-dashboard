@@ -1,8 +1,7 @@
-import axios from 'axios'
-import { authStore } from 'ac-app-authenticator'
+import { apiGet } from '../helper/apiFetch'
 
 import { hosts } from '../../../config/api/hosts'
 
 export const restartJob = ( env: 'dev' | 'live', jobList, jobId ) => {
-    return axios.get( `${ hosts.jobs[ env ] }/v1/bull/retryJob/${ jobList }/${ jobId }`, authStore.authedApiCallBaseConfig() )
+    return apiGet( `${ hosts.jobs[ env ] }/v1/bull/retryJob/${ jobList }/${ jobId }` )
 }
