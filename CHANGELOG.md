@@ -1,4 +1,18 @@
 
+## [0.1.3](https://github.com/admiralcloud/ac-bull-dashboard/compare/v0.1.2..v0.1.3) (2026-09-28 17:36:12)
+
+
+### Bug Fix
+
+* **App:** Updated packages | MP | [5dfd81fe39722aa34228321d35a6abf8f11b2bf0](https://github.com/admiralcloud/ac-bull-dashboard/commit/5dfd81fe39722aa34228321d35a6abf8f11b2bf0)    
+Updated packages and adjusted code. Removed unnecessary packages  
+Related issues:
+### Chores
+
+* **App:** Fixed buildAndDeploy script | MP | [cab091bcb9a913ca19052feb9aff15eb6ce8aea0](https://github.com/admiralcloud/ac-bull-dashboard/commit/cab091bcb9a913ca19052feb9aff15eb6ce8aea0)    
+Fixed buildAndDeploy script  
+Related issues:
+
 ## [0.1.2](https://github.com/admiralcloud/ac-bull-dashboard/compare/v0.1.1..v0.1.2) (2026-04-01 14:56:43)
 
 
